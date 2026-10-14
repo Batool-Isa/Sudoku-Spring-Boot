@@ -60,8 +60,24 @@ public class Sudoku {
             puzzlesLines.add(puzzulesNum.subList(i, (i + 9)));
 
         }
+        int lineCounter = 0;
+        int charCounter = 0;
+        System.out.println(); // for organizing the print
         for (List<Integer> line : puzzlesLines) {
-            System.out.println(line);
+            lineCounter++;
+            for(int c: line) {
+                charCounter++;
+                System.out.print(" "+ c + " ");
+                if (charCounter % 3 == 0 && charCounter%9 !=0) {
+                    System.out.print(" | ");
+                }
+                if (charCounter % 9 == 0) {
+                    System.out.println();
+                }
+            }
+            if(lineCounter%3==0){
+                System.out.println("----------------------------------");
+            }
         }
     }
 }
