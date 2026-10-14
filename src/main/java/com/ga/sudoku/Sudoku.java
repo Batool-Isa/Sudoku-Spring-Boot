@@ -12,7 +12,7 @@ public class Sudoku {
     private SudokuCell[][] sudokuGrid = new SudokuCell[9][9];
 
     // Method to read the puzzle1.txt file and generate sudoku grid
-    public void readPuzzle(String fileName) throws SudokuFileNotFoundException {
+    public SudokuCell[][] readPuzzle(String fileName) throws SudokuFileNotFoundException {
         // read puzzle file
         File file = new File(fileName);
         if (!file.exists()) {
@@ -43,21 +43,22 @@ public class Sudoku {
                 rowCounter++;
             }
             // print puzzle board
-            printGameBoard();
+            printGameBoard(sudokuGrid);
+            return sudokuGrid;
         } catch (IOException e) {
 
         }
-
+return null;
 
     }
 
     // Method to save the generated solution file as puzzle1.solution.txt
     public void saveSolution() {
-
+   // SudokuSolver.solve(sudokuGrid);
     }
 
     //    Method to print the current game board
-    public void printGameBoard() throws BadRequestException {
+    public void printGameBoard(SudokuCell[][] sudokuGrid) throws BadRequestException {
         if (sudokuGrid== null) {
             throw new BadRequestException("Invalid board");
         }

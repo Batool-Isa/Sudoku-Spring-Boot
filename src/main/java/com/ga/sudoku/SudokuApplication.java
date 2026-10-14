@@ -14,6 +14,13 @@ public class SudokuApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		Sudoku sudoku = new Sudoku();
-		sudoku.readPuzzle("puzzles/puzzle1.txt");
+SudokuCell[][] grid =sudoku.readPuzzle("puzzles/puzzle1.txt");
+		if (SudokuSolver.solve(grid)) {
+			 sudoku.printGameBoard(grid);
+		 sudoku.saveSolution();
+			} else {
+			System.out.println("No solution");
+		}
+
 	}
 }
