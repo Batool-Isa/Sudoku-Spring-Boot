@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class InvalidCharacterException extends BadRequestException {
+public class InvalidCharacterException extends Exception {
     public InvalidCharacterException(String msg) {
         super(msg);
     }
