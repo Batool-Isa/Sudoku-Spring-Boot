@@ -1,4 +1,12 @@
 package com.ga.sudoku.exception;
 
-public class InvalidCharacterException {
+import org.apache.coyote.BadRequestException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class InvalidCharacterException extends BadRequestException {
+    public InvalidCharacterException(String msg) {
+        super(msg);
+    }
 }
