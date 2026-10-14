@@ -6,10 +6,11 @@ import org.apache.coyote.BadRequestException;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Sudoku {
+    private SudokuCell[][] sudokuGrid = new SudokuCell[9][9];
+
     // Method to read the puzzle1.txt file and generate sudoku grid
     public void readPuzzle(String fileName) throws SudokuFileNotFoundException {
         // read puzzle file
@@ -20,23 +21,29 @@ public class Sudoku {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             int lineCounter = 0;
-            ArrayList<Integer> num = new ArrayList<>();
-
+            int[][] sudokuCells = new int[9][9];
+            int rowCounter =0;
+            int columnCounter =0;
             // validate file content
             while ((line = reader.readLine()) != null) {
                 lineCounter++;
                 if (line.length() != 9) {
                     throw new InvalidCharacterException("Line " + lineCounter + " has " + line.length() + " character instead of 9");
                 }
+                columnCounter=0;
+
                 for (char c : line.toCharArray()) {
                     if (!Character.isDigit(c)) {
                         throw new InvalidCharacterException("Line " + lineCounter + " has " + c + " character which is not a digit");
                     }
-                    num.add(c - '0');
+                    sudokuGrid[rowCounter][columnCounter] = new SudokuCell(rowCounter, columnCounter,c - '0');
+                    columnCounter++;
+
                 }
+                rowCounter++;
             }
             // print puzzle board
-            PrintGameBoard(num);
+            printGameBoard();
         } catch (IOException e) {
 
         }
@@ -50,24 +57,30 @@ public class Sudoku {
     }
 
     //    Method to print the current game board
-    public void PrintGameBoard(ArrayList<Integer> puzzulesNum) throws BadRequestException {
-        if (puzzulesNum.size() != 81) {
+    public void printGameBoard() throws BadRequestException {
+        if (sudokuGrid== null) {
             throw new BadRequestException("Invalid board");
         }
-        List<List<Integer>> puzzlesLines = new ArrayList<>();
+        // row validation
+        if (sudokuGrid.length!= 9) {
+            throw new BadRequestException("Invalid board");
+        }
+        // loop throw each row to validate column
+        for (int i = 0; i < sudokuGrid.length; i ++) {
+            if(sudokuGrid[i].length != 9){
+                throw new BadRequestException("Invalid board");
 
-        for (int i = 0; i < puzzulesNum.size(); i += 9) {
-            puzzlesLines.add(puzzulesNum.subList(i, (i + 9)));
+            }
 
         }
         int lineCounter = 0;
         int charCounter = 0;
         System.out.println(); // for organizing the print
-        for (List<Integer> line : puzzlesLines) {
+        for (SudokuCell[] row : sudokuGrid) {
             lineCounter++;
-            for(int c: line) {
+            for(SudokuCell cell: row) {
                 charCounter++;
-                System.out.print(" "+ c + " ");
+                System.out.print(" "+ cell.getValue() + " ");
                 if (charCounter % 3 == 0 && charCounter%9 !=0) {
                     System.out.print(" | ");
                 }
