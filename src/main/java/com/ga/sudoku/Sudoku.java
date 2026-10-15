@@ -3,10 +3,7 @@ package com.ga.sudoku;
 import com.ga.sudoku.exception.InvalidCharacterException;
 import com.ga.sudoku.exception.SudokuFileNotFoundException;
 import org.apache.coyote.BadRequestException;
-
 import java.io.*;
-
-
 public class Sudoku {
     private SudokuCell[][] sudokuGrid = new SudokuCell[9][9];
 

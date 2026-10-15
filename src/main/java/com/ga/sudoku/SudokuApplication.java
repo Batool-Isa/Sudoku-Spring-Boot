@@ -15,9 +15,19 @@ public class SudokuApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Sudoku sudoku = new Sudoku();
         SudokuCell[][] grid = sudoku.readPuzzle("puzzle1.txt");
+        System.out.println("----- puzzle 1-----");
         if (SudokuSolver.solve(grid)) {
             sudoku.printGameBoard(grid);
             sudoku.saveSolution("puzzle1.txt", grid);
+        } else {
+            System.out.println("No solution");
+        }
+
+        SudokuCell[][] grid2 = sudoku.readPuzzle("puzzle2.txt");
+        System.out.println("----- puzzle 2-----");
+        if (SudokuSolver.solve(grid)) {
+            sudoku.printGameBoard(grid);
+            sudoku.saveSolution("puzzle2.txt", grid2);
         } else {
             System.out.println("No solution");
         }
