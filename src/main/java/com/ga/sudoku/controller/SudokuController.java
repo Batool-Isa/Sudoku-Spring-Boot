@@ -5,7 +5,6 @@ import com.ga.sudoku.exception.InvalidCharacterException;
 import com.ga.sudoku.exception.SudokuFileNotFoundException;
 import com.ga.sudoku.model.SudokuCell;
 import com.ga.sudoku.request.MoveRequest;
-import com.ga.sudoku.response.BoardResponse;
 import com.ga.sudoku.service.Sudoku;
 import com.ga.sudoku.service.SudokuSolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +23,12 @@ public class SudokuController {
     @Autowired
     private SudokuSolver solver;
 
+    public record BoardResponse(SudokuCell[][] grid, String puzzleName) {}
     @GetMapping("/loadBoard")
     public BoardResponse loadSudoku() throws SudokuFileNotFoundException, InvalidCharacterException {
         List<String> puzzles = sudoku.listPuzzles();
         String puzzleName = puzzles.get(new Random().nextInt(puzzles.size()));
+
         return new BoardResponse(sudoku.readPuzzle(puzzleName), puzzleName);
     }
 
