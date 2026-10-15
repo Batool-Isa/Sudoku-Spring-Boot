@@ -1,4 +1,6 @@
-package com.ga.sudoku;
+package com.ga.sudoku.service;
+
+import com.ga.sudoku.model.SudokuCell;
 
 public class SudokuSolver {
 

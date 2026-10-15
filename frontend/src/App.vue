@@ -1,47 +1,29 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { ref, onMounted } from 'vue'
+
+const score = ref(0)
+const name = ref('')
+const board = ref([])
+
+async function getBoard(){
+    const response = await fetch('http://localhost:8080/api/sudoku/loadBoard')
+    board.value = await response.json()
+}
+onMounted(getBoard)
+
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+    <body>
+  <!-- events -->
+  <button id="loadButton" @click="getBoard">ReloadBoard</button>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <div v-for="(row, r) in board" :key="r" class="row">
+   <input v-for="(cell, c) in row" :key="c" class="cell"
+       :value="cell.value || ''"
+       :readonly="cell.fixed"
+       size="1">
+  </div>
+</body>
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>

@@ -1,5 +1,8 @@
 package com.ga.sudoku;
 
+import com.ga.sudoku.model.SudokuCell;
+import com.ga.sudoku.service.Sudoku;
+import com.ga.sudoku.service.SudokuSolver;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

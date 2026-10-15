@@ -1,9 +1,13 @@
-package com.ga.sudoku;
+package com.ga.sudoku.service;
 
 import com.ga.sudoku.exception.InvalidCharacterException;
 import com.ga.sudoku.exception.SudokuFileNotFoundException;
+import com.ga.sudoku.model.SudokuCell;
 import org.apache.coyote.BadRequestException;
+import org.springframework.stereotype.Service;
+
 import java.io.*;
+@Service
 public class Sudoku {
     private SudokuCell[][] sudokuGrid = new SudokuCell[9][9];
 
@@ -36,6 +40,9 @@ public class Sudoku {
 
                 }
                 rowCounter++;
+            }
+            if (rowCounter != 9) {
+                throw new InvalidCharacterException("File has " + rowCounter + " lines instead of 9");
             }
             // print puzzle board
             printGameBoard(sudokuGrid);

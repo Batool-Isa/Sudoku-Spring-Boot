@@ -1,4 +1,4 @@
-package com.ga.sudoku;
+package com.ga.sudoku.model;
 
 public class SudokuCell {
     private int column;
