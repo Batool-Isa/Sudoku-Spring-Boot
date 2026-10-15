@@ -7,12 +7,13 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+
 @Service
 public class Sudoku {
-    private SudokuCell[][] sudokuGrid = new SudokuCell[9][9];
 
     // Method to read the puzzle1.txt file and generate sudoku grid
-    public SudokuCell[][] readPuzzle(String fileName) throws SudokuFileNotFoundException ,InvalidCharacterException{
+    public SudokuCell[][] readPuzzle(String fileName) throws SudokuFileNotFoundException, InvalidCharacterException {
+        SudokuCell[][] sudokuGrid = new SudokuCell[9][9];
         // read puzzle file
         File file = new File("puzzles/" + fileName);
         if (!file.exists()) {
@@ -32,7 +33,7 @@ public class Sudoku {
                 columnCounter = 0;
 
                 for (char c : line.toCharArray()) {
-                    if (!Character.isDigit(c)) {
+                    if (c < '0' || c > '9') {
                         throw new InvalidCharacterException("Line " + lineCounter + " has " + c + " character which is not a digit");
                     }
                     sudokuGrid[rowCounter][columnCounter] = new SudokuCell(rowCounter, columnCounter, c - '0');
@@ -57,25 +58,23 @@ public class Sudoku {
     // Method to save the generated solution file as puzzle1.solution.txt
     public void saveSolution(String puzzleFileName, SudokuCell[][] grid) throws IOException {
 
-       try {
-           String fileName = puzzleFileName.replace(".txt","");
-           File file = new File("puzzles-solutions/" + fileName + "-solution.txt");
-//           if (!file.exists()) {
-//               file.createNewFile();
-//           }
-           BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-           System.out.println("Calling writere");
-           for(SudokuCell[] row : grid){
-               for(SudokuCell cell : row) {
-                   writer.write(String.valueOf(cell.getValue()));
+        try {
+            String fileName = puzzleFileName.replace(".txt", "");
+            File file = new File("puzzles-solutions/" + fileName + "-solution.txt");
+            file.getParentFile().mkdirs();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            System.out.println("Calling writere");
+            for (SudokuCell[] row : grid) {
+                for (SudokuCell cell : row) {
+                    writer.write(String.valueOf(cell.getValue()));
 
-               }
-               writer.newLine();
-           }
-writer.close();
-       } catch (Exception e) {
-           throw new RuntimeException(e);
-       }
+                }
+                writer.newLine();
+            }
+            writer.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
