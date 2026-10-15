@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
 @RestController
@@ -25,10 +26,8 @@ public class SudokuController {
 
     @GetMapping("/loadBoard")
     public BoardResponse loadSudoku() throws SudokuFileNotFoundException, InvalidCharacterException {
-        Random random = new Random();
-        int number = random.nextInt(3) + 1;
-        String puzzleName = "puzzle" + number + ".txt";
-        System.out.println("PUZZZLE "+puzzleName);
+        List<String> puzzles = sudoku.listPuzzles();
+        String puzzleName = puzzles.get(new Random().nextInt(puzzles.size()));
         return new BoardResponse(sudoku.readPuzzle(puzzleName), puzzleName);
     }
 

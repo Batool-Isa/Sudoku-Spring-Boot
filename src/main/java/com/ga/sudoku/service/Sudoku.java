@@ -3,19 +3,29 @@ package com.ga.sudoku.service;
 import com.ga.sudoku.exception.InvalidCharacterException;
 import com.ga.sudoku.exception.SudokuFileNotFoundException;
 import com.ga.sudoku.model.SudokuCell;
-import org.apache.coyote.BadRequestException;
+import com.ga.sudoku.exception.InvalidBoardException;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class Sudoku {
+
+    public List<String> listPuzzles() throws SudokuFileNotFoundException {
+        File[] files = new File("puzzles").listFiles((dir, name) -> name.endsWith(".txt"));
+        if (files == null || files.length == 0) {
+            throw new SudokuFileNotFoundException("No puzzle files found in the puzzles folder");
+        }
+        return Arrays.stream(files).map(File::getName).sorted().toList();
+    }
 
     // Method to read the puzzle1.txt file and generate sudoku grid
     public SudokuCell[][] readPuzzle(String fileName) throws SudokuFileNotFoundException, InvalidCharacterException {
         SudokuCell[][] sudokuGrid = new SudokuCell[9][9];
         // read puzzle file
-        File file = new File("puzzles/" + fileName);
+        File file = new File("puzzles/" + new File(fileName).getName());
         if (!file.exists()) {
             throw new SudokuFileNotFoundException("File " + fileName + "  not found");
         }
@@ -58,39 +68,33 @@ public class Sudoku {
     // Method to save the generated solution file as puzzle1.solution.txt
     public void saveSolution(String puzzleFileName, SudokuCell[][] grid) throws IOException {
 
-        try {
-            String fileName = puzzleFileName.replace(".txt", "");
-            File file = new File("puzzles-solutions/" + fileName + "-solution.txt");
-            file.getParentFile().mkdirs();
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            System.out.println("Calling writere");
+        String fileName = new File(puzzleFileName).getName().replace(".txt", "");
+        File file = new File("puzzles-solutions/" + fileName + "-solution.txt");
+        file.getParentFile().mkdirs();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (SudokuCell[] row : grid) {
                 for (SudokuCell cell : row) {
                     writer.write(String.valueOf(cell.getValue()));
-
                 }
                 writer.newLine();
             }
-            writer.close();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
 
     }
 
     //    Method to print the current game board
-    public void printGameBoard(SudokuCell[][] sudokuGrid) throws BadRequestException {
+    public void printGameBoard(SudokuCell[][] sudokuGrid) {
         if (sudokuGrid == null) {
-            throw new BadRequestException("Invalid board");
+            throw new InvalidBoardException("Invalid board");
         }
         // row validation
         if (sudokuGrid.length != 9) {
-            throw new BadRequestException("Invalid board");
+            throw new InvalidBoardException("Invalid board");
         }
         // loop throw each row to validate column
         for (int i = 0; i < sudokuGrid.length; i++) {
             if (sudokuGrid[i].length != 9) {
-                throw new BadRequestException("Invalid board");
+                throw new InvalidBoardException("Invalid board");
 
             }
 

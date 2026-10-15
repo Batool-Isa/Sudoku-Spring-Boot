@@ -3,9 +3,7 @@ package com.ga.sudoku.service;
 import com.ga.sudoku.exception.InvalidBoardException;
 import com.ga.sudoku.model.SudokuCell;
 import com.ga.sudoku.request.MoveRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class SudokuSolver {
@@ -38,6 +36,12 @@ public class SudokuSolver {
 
     public boolean isValid(MoveRequest request) {
         SudokuCell[][] grid = createGrid(request.getBoard());
+        if (request.getRow() < 0 || request.getRow() > 8 || request.getCol() < 0 || request.getCol() > 8) {
+            throw new InvalidBoardException("Row and column must be between 0 and 8");
+        }
+        if (request.getValue() < 1 || request.getValue() > 9) {
+            throw new InvalidBoardException("Value must be between 1 and 9");
+        }
         grid[request.getRow()][request.getCol()].setValue(0);
         return isValid(grid, request.getRow(), request.getCol(), request.getValue());
     }
@@ -58,9 +62,7 @@ public class SudokuSolver {
         int boxRowStart = row - (row % 3);
         int boxColStart = col - (col % 3);
         for (int r = 0; r < 3; r++) {
-            // System.out.println("row of grid--> "+r);
             for (int c = 0; c < 3; c++) {
-                // System.out.println("col of grid--> "+r);
                 if (grid[r + boxRowStart][c + boxColStart].getValue() == (value)) {
                     return false;
                 }
@@ -89,8 +91,6 @@ public class SudokuSolver {
                 }
             }
         }
-
-        System.out.println("calling is valid  " + isValid(grid, 0, 4, 8));
         return true;
     }
     public boolean isGameSolved(SudokuCell[][] grid){

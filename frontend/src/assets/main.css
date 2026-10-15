@@ -89,6 +89,17 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
+.error {
+  width: 100%;
+  margin: 14px 0 0;
+  padding: 8px 10px;
+  border: 1px solid var(--pencil);
+  color: var(--pencil);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  box-sizing: border-box;
+}
+
 .board {
   margin-top: 22px;
   border: 2.5px solid var(--ink);
